@@ -1,0 +1,113 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SecurityConfig.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.security</a> &gt; <span class="el_source">SecurityConfig.kt</span></div><h1>SecurityConfig.kt</h1><pre class="source lang-java linenums">package com.example.finance.security
+
+import com.fasterxml.jackson.databind.ObjectMapper
+import com.example.finance.dto.error.ErrorResponse
+import jakarta.servlet.http.HttpServletResponse
+import org.springframework.context.annotation.Bean
+import org.springframework.context.annotation.Configuration
+import org.springframework.http.HttpStatus
+import org.springframework.http.MediaType
+import org.springframework.security.authentication.AuthenticationManager
+import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration
+import org.springframework.security.config.annotation.web.builders.HttpSecurity
+import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity
+import org.springframework.security.config.http.SessionCreationPolicy
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder
+import org.springframework.security.crypto.password.PasswordEncoder
+import org.springframework.security.web.AuthenticationEntryPoint
+import org.springframework.security.web.SecurityFilterChain
+import org.springframework.security.web.access.AccessDeniedHandler
+
+@Configuration
+@EnableWebSecurity
+<span class="fc" id="L23">class SecurityConfig(</span>
+<span class="fc" id="L24">    private val objectMapper: ObjectMapper</span>
+) {
+
+    @Bean
+    fun passwordEncoder(): PasswordEncoder {
+<span class="fc" id="L29">        return BCryptPasswordEncoder()</span>
+    }
+
+    @Bean
+    fun authenticationManager(config: AuthenticationConfiguration): AuthenticationManager {
+<span class="fc" id="L34">        return config.authenticationManager</span>
+    }
+
+    @Bean
+    fun securityFilterChain(http: HttpSecurity): SecurityFilterChain {
+<span class="fc" id="L39">        http</span>
+<span class="fc" id="L40">            .csrf { it.disable() }</span>
+<span class="fc" id="L41">            .headers { headers -&gt;</span>
+<span class="fc" id="L42">                headers.frameOptions { it.disable() }</span>
+<span class="fc" id="L43">            }</span>
+<span class="fc" id="L44">            .sessionManagement { session -&gt;</span>
+<span class="fc" id="L45">                session.sessionCreationPolicy(SessionCreationPolicy.IF_REQUIRED)</span>
+<span class="fc" id="L46">            }</span>
+<span class="fc" id="L47">            .exceptionHandling { handling -&gt;</span>
+<span class="fc" id="L48">                handling</span>
+<span class="fc" id="L49">                    .authenticationEntryPoint(customAuthenticationEntryPoint())</span>
+<span class="fc" id="L50">                    .accessDeniedHandler(customAccessDeniedHandler())</span>
+<span class="fc" id="L51">            }</span>
+<span class="fc" id="L52">            .authorizeHttpRequests { auth -&gt;</span>
+<span class="fc" id="L53">                auth</span>
+<span class="fc" id="L54">                    .requestMatchers(</span>
+<span class="fc" id="L55">                        &quot;/api/auth/register&quot;,</span>
+<span class="fc" id="L56">                        &quot;/api/auth/login&quot;,</span>
+<span class="fc" id="L57">                        &quot;/swagger-ui/**&quot;,</span>
+<span class="fc" id="L58">                        &quot;/swagger-ui.html&quot;,</span>
+<span class="fc" id="L59">                        &quot;/v3/api-docs/**&quot;,</span>
+<span class="fc" id="L60">                        &quot;/h2-console/**&quot;,</span>
+<span class="fc" id="L61">                        &quot;/&quot;,</span>
+<span class="fc" id="L62">                        &quot;/index.html&quot;,</span>
+<span class="fc" id="L63">                        &quot;/css/**&quot;,</span>
+<span class="fc" id="L64">                        &quot;/js/**&quot;,</span>
+<span class="fc" id="L65">                        &quot;/favicon.ico&quot;</span>
+<span class="fc" id="L66">                    ).permitAll()</span>
+<span class="fc" id="L67">                    .requestMatchers(&quot;/api/**&quot;).authenticated()</span>
+<span class="fc" id="L68">                    .anyRequest().permitAll()</span>
+<span class="fc" id="L69">            }</span>
+<span class="fc" id="L70">            .logout { logout -&gt;</span>
+<span class="fc" id="L71">                logout</span>
+<span class="fc" id="L72">                    .logoutUrl(&quot;/api/auth/logout&quot;)</span>
+<span class="fc" id="L73">                    .invalidateHttpSession(true)</span>
+<span class="fc" id="L74">                    .clearAuthentication(true)</span>
+<span class="fc" id="L75">                    .deleteCookies(&quot;JSESSIONID&quot;)</span>
+<span class="fc" id="L76">                    .logoutSuccessHandler { _, response, _ -&gt;</span>
+<span class="fc" id="L77">                        response.status = HttpServletResponse.SC_OK</span>
+<span class="fc" id="L78">                        response.contentType = MediaType.APPLICATION_JSON_VALUE</span>
+<span class="fc" id="L79">                        val body = mapOf(&quot;message&quot; to &quot;Logout successful&quot;)</span>
+<span class="fc" id="L80">                        objectMapper.writeValue(response.writer, body)</span>
+<span class="fc" id="L81">                    }</span>
+<span class="fc" id="L82">            }</span>
+
+<span class="fc" id="L84">        return http.build()</span>
+    }
+
+    @Bean
+    fun customAuthenticationEntryPoint(): AuthenticationEntryPoint {
+<span class="fc" id="L89">        return AuthenticationEntryPoint { _, response, authException -&gt;</span>
+<span class="fc" id="L90">            response.status = HttpServletResponse.SC_UNAUTHORIZED</span>
+<span class="fc" id="L91">            response.contentType = MediaType.APPLICATION_JSON_VALUE</span>
+<span class="fc" id="L92">            val errorResponse = ErrorResponse(</span>
+<span class="fc" id="L93">                status = HttpStatus.UNAUTHORIZED.value(),</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                message = authException.message ?: &quot;Authentication required&quot;</span>
+            )
+<span class="fc" id="L96">            objectMapper.writeValue(response.writer, errorResponse)</span>
+<span class="fc" id="L97">        }</span>
+    }
+
+    @Bean
+    fun customAccessDeniedHandler(): AccessDeniedHandler {
+<span class="fc" id="L102">        return AccessDeniedHandler { _, response, accessDeniedException -&gt;</span>
+<span class="nc" id="L103">            response.status = HttpServletResponse.SC_FORBIDDEN</span>
+<span class="nc" id="L104">            response.contentType = MediaType.APPLICATION_JSON_VALUE</span>
+<span class="nc" id="L105">            val errorResponse = ErrorResponse(</span>
+<span class="nc" id="L106">                status = HttpStatus.FORBIDDEN.value(),</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                message = accessDeniedException.message ?: &quot;Access denied&quot;</span>
+            )
+<span class="nc" id="L109">            objectMapper.writeValue(response.writer, errorResponse)</span>
+<span class="nc" id="L110">        }</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

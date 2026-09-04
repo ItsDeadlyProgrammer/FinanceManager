@@ -1,0 +1,89 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.service</a> &gt; <span class="el_source">CategoryService.kt</span></div><h1>CategoryService.kt</h1><pre class="source lang-java linenums">package com.example.finance.service
+
+import com.example.finance.dto.category.CategoryListResponse
+import com.example.finance.dto.category.CategoryRequest
+import com.example.finance.dto.category.CategoryResponse
+import com.example.finance.entity.Category
+import com.example.finance.exception.BadRequestException
+import com.example.finance.exception.ResourceAlreadyExistsException
+import com.example.finance.exception.ResourceNotFoundException
+import com.example.finance.repository.CategoryRepository
+import com.example.finance.repository.TransactionRepository
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+
+@Service
+<span class="fc" id="L16">class CategoryService(</span>
+<span class="fc" id="L17">    private val categoryRepository: CategoryRepository,</span>
+<span class="fc" id="L18">    private val transactionRepository: TransactionRepository</span>
+) {
+
+    @Transactional(readOnly = true)
+    fun getCategories(userId: Long): CategoryListResponse {
+<span class="fc" id="L23">        val categories = categoryRepository.findAllForUser(userId)</span>
+<span class="fc" id="L24">        val dtos = categories.map {</span>
+<span class="fc" id="L25">            CategoryResponse(</span>
+<span class="fc" id="L26">                name = it.name,</span>
+<span class="fc" id="L27">                type = it.type,</span>
+<span class="fc" id="L28">                isCustom = it.isCustom</span>
+<span class="fc" id="L29">            )</span>
+        }
+<span class="fc" id="L31">        return CategoryListResponse(categories = dtos)</span>
+    }
+
+    @Transactional
+    fun createCustomCategory(userId: Long, request: CategoryRequest): CategoryResponse {
+<span class="fc" id="L36">        val nameTrimmed = request.name.trim()</span>
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (nameTrimmed.isBlank()) {</span>
+<span class="nc" id="L38">            throw BadRequestException(&quot;Category name cannot be blank&quot;)</span>
+        }
+
+        // Check duplicate name for this user or default category
+<span class="fc bfc" id="L42" title="All 2 branches covered.">        if (categoryRepository.existsByNameAndUserId(nameTrimmed, userId) ||</span>
+<span class="fc bfc" id="L43" title="All 2 branches covered.">            categoryRepository.existsByNameAndIsCustomFalse(nameTrimmed)) {</span>
+<span class="fc" id="L44">            throw ResourceAlreadyExistsException(&quot;Category with name '$nameTrimmed' already exists&quot;)</span>
+        }
+
+<span class="fc" id="L47">        val category = Category(</span>
+<span class="fc" id="L48">            name = nameTrimmed,</span>
+<span class="fc" id="L49">            type = request.type,</span>
+<span class="fc" id="L50">            userId = userId,</span>
+<span class="fc" id="L51">            isCustom = true</span>
+        )
+<span class="fc" id="L53">        val saved = categoryRepository.save(category)</span>
+
+<span class="fc" id="L55">        return CategoryResponse(</span>
+<span class="fc" id="L56">            name = saved.name,</span>
+<span class="fc" id="L57">            type = saved.type,</span>
+<span class="fc" id="L58">            isCustom = saved.isCustom</span>
+        )
+    }
+
+    @Transactional
+    fun deleteCustomCategory(userId: Long, categoryName: String) {
+<span class="fc" id="L64">        val nameTrimmed = categoryName.trim()</span>
+
+<span class="fc" id="L66">        val defaultCategory = categoryRepository.findByNameAndIsCustomFalse(nameTrimmed)</span>
+<span class="fc bfc" id="L67" title="All 2 branches covered.">        if (defaultCategory != null) {</span>
+<span class="fc" id="L68">            throw BadRequestException(&quot;Default categories cannot be deleted&quot;)</span>
+        }
+
+<span class="fc bfc" id="L71" title="All 2 branches covered.">        val customCategory = categoryRepository.findByNameAndUserId(nameTrimmed, userId)</span>
+<span class="fc" id="L72">            ?: throw ResourceNotFoundException(&quot;Custom category '$nameTrimmed' not found&quot;)</span>
+
+<span class="fc" id="L74">        val refCount = transactionRepository.countByCategoryIdAndIsDeletedFalse(customCategory.id!!)</span>
+<span class="fc bfc" id="L75" title="All 2 branches covered.">        if (refCount &gt; 0) {</span>
+<span class="fc" id="L76">            throw ResourceAlreadyExistsException(&quot;Category '$nameTrimmed' is referenced by existing transactions and cannot be deleted&quot;)</span>
+        }
+
+<span class="fc" id="L79">        categoryRepository.delete(customCategory)</span>
+<span class="fc" id="L80">    }</span>
+
+    @Transactional(readOnly = true)
+    fun findCategoryForUser(categoryName: String, userId: Long): Category {
+<span class="fc" id="L84">        val nameTrimmed = categoryName.trim()</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        return categoryRepository.findByNameForUser(nameTrimmed, userId)</span>
+<span class="nc" id="L86">            ?: throw BadRequestException(&quot;Category '$categoryName' does not exist&quot;)</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

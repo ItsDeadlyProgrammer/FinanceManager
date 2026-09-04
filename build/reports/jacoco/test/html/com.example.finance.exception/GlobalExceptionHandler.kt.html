@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>GlobalExceptionHandler.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.exception</a> &gt; <span class="el_source">GlobalExceptionHandler.kt</span></div><h1>GlobalExceptionHandler.kt</h1><pre class="source lang-java linenums">package com.example.finance.exception
+
+import com.example.finance.dto.error.ErrorResponse
+import jakarta.validation.ConstraintViolationException
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.http.converter.HttpMessageNotReadableException
+import org.springframework.security.access.AccessDeniedException
+import org.springframework.security.core.AuthenticationException
+import org.springframework.web.bind.MethodArgumentNotValidException
+import org.springframework.web.bind.annotation.ControllerAdvice
+import org.springframework.web.bind.annotation.ExceptionHandler
+import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+
+<span class="fc" id="L15">@ControllerAdvice</span>
+class GlobalExceptionHandler {
+
+    @ExceptionHandler(MethodArgumentNotValidException::class)
+    fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L20">        val errorMessage = ex.bindingResult.fieldErrors</span>
+<span class="nc" id="L21">            .joinToString(&quot;; &quot;) { &quot;${it.field}: ${it.defaultMessage}&quot; }</span>
+<span class="nc bnc" id="L22" title="All 4 branches missed.">            .ifEmpty { &quot;Validation error&quot; }</span>
+<span class="nc" id="L23">        return ResponseEntity</span>
+<span class="nc" id="L24">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L25">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = errorMessage))</span>
+    }
+
+    @ExceptionHandler(ConstraintViolationException::class)
+    fun handleConstraintViolation(ex: ConstraintViolationException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L30">        val message = ex.constraintViolations.joinToString(&quot;; &quot;) { it.message }</span>
+<span class="nc" id="L31">        return ResponseEntity</span>
+<span class="nc" id="L32">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L33">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = message))</span>
+    }
+
+    @ExceptionHandler(BadRequestException::class)
+    fun handleBadRequest(ex: BadRequestException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L38">        return ResponseEntity</span>
+<span class="fc" id="L39">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = ex.message ?: &quot;Bad request&quot;))</span>
+    }
+
+    @ExceptionHandler(HttpMessageNotReadableException::class)
+    fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L45">        return ResponseEntity</span>
+<span class="fc" id="L46">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="fc" id="L47">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Malformed JSON request&quot;))</span>
+    }
+
+    @ExceptionHandler(MethodArgumentTypeMismatchException::class)
+    fun handleTypeMismatch(ex: MethodArgumentTypeMismatchException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L52">        return ResponseEntity</span>
+<span class="nc" id="L53">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L54">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Invalid parameter type: ${ex.name}&quot;))</span>
+    }
+
+    @ExceptionHandler(ResourceNotFoundException::class)
+    fun handleNotFound(ex: ResourceNotFoundException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L59">        return ResponseEntity</span>
+<span class="fc" id="L60">            .status(HttpStatus.NOT_FOUND)</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.NOT_FOUND.value(), message = ex.message ?: &quot;Resource not found&quot;))</span>
+    }
+
+    @ExceptionHandler(ForbiddenAccessException::class)
+    fun handleForbidden(ex: ForbiddenAccessException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L66">        return ResponseEntity</span>
+<span class="fc" id="L67">            .status(HttpStatus.FORBIDDEN)</span>
+<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access forbidden&quot;))</span>
+    }
+
+    @ExceptionHandler(AccessDeniedException::class)
+    fun handleAccessDenied(ex: AccessDeniedException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L73">        return ResponseEntity</span>
+<span class="fc" id="L74">            .status(HttpStatus.FORBIDDEN)</span>
+<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access denied&quot;))</span>
+    }
+
+    @ExceptionHandler(ResourceAlreadyExistsException::class)
+    fun handleConflict(ex: ResourceAlreadyExistsException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L80">        return ResponseEntity</span>
+<span class="fc" id="L81">            .status(HttpStatus.CONFLICT)</span>
+<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.CONFLICT.value(), message = ex.message ?: &quot;Resource already exists&quot;))</span>
+    }
+
+    @ExceptionHandler(UnauthorizedException::class)
+    fun handleUnauthorized(ex: UnauthorizedException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L87">        return ResponseEntity</span>
+<span class="fc" id="L88">            .status(HttpStatus.UNAUTHORIZED)</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Unauthorized&quot;))</span>
+    }
+
+    @ExceptionHandler(AuthenticationException::class)
+    fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L94">        return ResponseEntity</span>
+<span class="nc" id="L95">            .status(HttpStatus.UNAUTHORIZED)</span>
+<span class="nc bnc" id="L96" title="All 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Authentication failed&quot;))</span>
+    }
+
+    @ExceptionHandler(Exception::class)
+    fun handleGeneral(ex: Exception): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="fc" id="L101">        return ResponseEntity</span>
+<span class="fc" id="L102">            .status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.INTERNAL_SERVER_ERROR.value(), message = ex.message ?: &quot;Internal server error&quot;))</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>UserResolver.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.security</a> &gt; <span class="el_source">UserResolver.kt</span></div><h1>UserResolver.kt</h1><pre class="source lang-java linenums">package com.example.finance.security
+
+import com.example.finance.exception.UnauthorizedException
+import com.example.finance.repository.UserRepository
+import org.springframework.security.core.Authentication
+import org.springframework.security.core.userdetails.UserDetails
+import org.springframework.stereotype.Component
+
+@Component
+<span class="fc" id="L10">class UserResolver(</span>
+<span class="fc" id="L11">    private val userRepository: UserRepository</span>
+) {
+    fun resolveUserId(authentication: Authentication?): Long {
+<span class="fc bfc" id="L14" title="All 4 branches covered.">        if (authentication == null || !authentication.isAuthenticated) {</span>
+<span class="fc" id="L15">            throw UnauthorizedException(&quot;Authentication required&quot;)</span>
+        }
+<span class="fc" id="L17">        val principal = authentication.principal</span>
+<span class="fc bfc" id="L18" title="All 2 branches covered.">        if (principal is CustomUserDetails) {</span>
+<span class="fc" id="L19">            return principal.id</span>
+        }
+<span class="fc bfc" id="L21" title="All 2 branches covered.">        if (principal is UserDetails) {</span>
+<span class="fc bfc" id="L22" title="All 2 branches covered.">            val user = userRepository.findByUsername(principal.username)</span>
+<span class="fc" id="L23">                ?: throw UnauthorizedException(&quot;User not found: ${principal.username}&quot;)</span>
+<span class="fc" id="L24">            return user.id!!</span>
+        }
+<span class="pc bpc" id="L26" title="1 of 2 branches missed.">        if (principal is String) {</span>
+<span class="pc bpc" id="L27" title="1 of 2 branches missed.">            val user = userRepository.findByUsername(principal)</span>
+<span class="nc" id="L28">                ?: throw UnauthorizedException(&quot;User not found: $principal&quot;)</span>
+<span class="fc" id="L29">            return user.id!!</span>
+        }
+<span class="nc" id="L31">        val name = authentication.name</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">        val user = userRepository.findByUsername(name)</span>
+<span class="nc" id="L33">            ?: throw UnauthorizedException(&quot;User not found: $name&quot;)</span>
+<span class="nc" id="L34">        return user.id!!</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

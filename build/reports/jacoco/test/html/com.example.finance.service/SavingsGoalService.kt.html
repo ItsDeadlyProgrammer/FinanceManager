@@ -1,0 +1,164 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>SavingsGoalService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.service</a> &gt; <span class="el_source">SavingsGoalService.kt</span></div><h1>SavingsGoalService.kt</h1><pre class="source lang-java linenums">package com.example.finance.service
+
+import com.example.finance.dto.goal.GoalListResponse
+import com.example.finance.dto.goal.GoalRequest
+import com.example.finance.dto.goal.GoalResponse
+import com.example.finance.dto.goal.GoalUpdateRequest
+import com.example.finance.entity.CategoryType
+import com.example.finance.entity.SavingsGoal
+import com.example.finance.exception.BadRequestException
+import com.example.finance.exception.ForbiddenAccessException
+import com.example.finance.exception.ResourceNotFoundException
+import com.example.finance.repository.SavingsGoalRepository
+import com.example.finance.repository.TransactionRepository
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
+import java.math.RoundingMode
+import java.time.LocalDate
+
+@Service
+<span class="fc" id="L21">class SavingsGoalService(</span>
+<span class="fc" id="L22">    private val savingsGoalRepository: SavingsGoalRepository,</span>
+<span class="fc" id="L23">    private val transactionRepository: TransactionRepository</span>
+) {
+
+    @Transactional
+    fun createGoal(userId: Long, request: GoalRequest): GoalResponse {
+<span class="fc" id="L28">        val today = LocalDate.now()</span>
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        val startDate = request.startDate ?: today</span>
+
+<span class="pc bpc" id="L31" title="1 of 2 branches missed.">        if (request.targetAmount &lt;= BigDecimal.ZERO) {</span>
+<span class="nc" id="L32">            throw BadRequestException(&quot;Target amount must be positive&quot;)</span>
+        }
+<span class="pc bpc" id="L34" title="1 of 2 branches missed.">        if (!request.targetDate.isAfter(today)) {</span>
+<span class="nc" id="L35">            throw BadRequestException(&quot;Target date must be in the future&quot;)</span>
+        }
+<span class="pc bpc" id="L37" title="1 of 2 branches missed.">        if (startDate.isAfter(request.targetDate)) {</span>
+<span class="nc" id="L38">            throw BadRequestException(&quot;Start date cannot be after target date&quot;)</span>
+        }
+
+<span class="fc" id="L41">        val goal = SavingsGoal(</span>
+<span class="fc" id="L42">            userId = userId,</span>
+<span class="fc" id="L43">            goalName = request.goalName.trim(),</span>
+<span class="fc" id="L44">            targetAmount = request.targetAmount,</span>
+<span class="fc" id="L45">            targetDate = request.targetDate,</span>
+<span class="fc" id="L46">            startDate = startDate</span>
+        )
+<span class="fc" id="L48">        val saved = savingsGoalRepository.save(goal)</span>
+<span class="fc" id="L49">        return calculateProgress(saved)</span>
+    }
+
+    @Transactional(readOnly = true)
+    fun getGoals(userId: Long): GoalListResponse {
+<span class="fc" id="L54">        val goals = savingsGoalRepository.findByUserId(userId)</span>
+<span class="fc" id="L55">        return GoalListResponse(goals = goals.map { calculateProgress(it) })</span>
+    }
+
+    @Transactional(readOnly = true)
+    fun getGoal(userId: Long, id: Long): GoalResponse {
+<span class="fc" id="L60">        val goal = savingsGoalRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L61">            ResourceNotFoundException(&quot;Goal with id $id not found&quot;)</span>
+        }
+
+<span class="fc bfc" id="L64" title="All 2 branches covered.">        if (goal.userId != userId) {</span>
+<span class="fc" id="L65">            throw ForbiddenAccessException(&quot;User is not authorized to access this goal&quot;)</span>
+        }
+
+<span class="fc" id="L68">        return calculateProgress(goal)</span>
+    }
+
+    @Transactional
+    fun updateGoal(userId: Long, id: Long, request: GoalUpdateRequest): GoalResponse {
+<span class="fc" id="L73">        val goal = savingsGoalRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L74">            ResourceNotFoundException(&quot;Goal with id $id not found&quot;)</span>
+        }
+
+<span class="fc bfc" id="L77" title="All 2 branches covered.">        if (goal.userId != userId) {</span>
+<span class="fc" id="L78">            throw ForbiddenAccessException(&quot;User is not authorized to access this goal&quot;)</span>
+        }
+
+<span class="fc" id="L81">        val today = LocalDate.now()</span>
+
+<span class="pc bpc" id="L83" title="1 of 2 branches missed.">        if (request.targetAmount != null) {</span>
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">            if (request.targetAmount &lt;= BigDecimal.ZERO) {</span>
+<span class="nc" id="L85">                throw BadRequestException(&quot;Target amount must be positive&quot;)</span>
+            }
+<span class="fc" id="L87">            goal.targetAmount = request.targetAmount</span>
+        }
+
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        if (request.targetDate != null) {</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">            if (!request.targetDate.isAfter(today)) {</span>
+<span class="nc" id="L92">                throw BadRequestException(&quot;Target date must be in the future&quot;)</span>
+            }
+<span class="nc bnc" id="L94" title="All 2 branches missed.">            if (goal.startDate.isAfter(request.targetDate)) {</span>
+<span class="nc" id="L95">                throw BadRequestException(&quot;Start date cannot be after target date&quot;)</span>
+            }
+<span class="nc" id="L97">            goal.targetDate = request.targetDate</span>
+        }
+
+<span class="pc bpc" id="L100" title="2 of 6 branches missed.">        if (request.goalName != null &amp;&amp; request.goalName.isNotBlank()) {</span>
+<span class="fc" id="L101">            goal.goalName = request.goalName.trim()</span>
+        }
+
+<span class="fc" id="L104">        val updated = savingsGoalRepository.save(goal)</span>
+<span class="fc" id="L105">        return calculateProgress(updated)</span>
+    }
+
+    @Transactional
+    fun deleteGoal(userId: Long, id: Long) {
+<span class="fc" id="L110">        val goal = savingsGoalRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L111">            ResourceNotFoundException(&quot;Goal with id $id not found&quot;)</span>
+        }
+
+<span class="fc bfc" id="L114" title="All 2 branches covered.">        if (goal.userId != userId) {</span>
+<span class="fc" id="L115">            throw ForbiddenAccessException(&quot;User is not authorized to access this goal&quot;)</span>
+        }
+
+<span class="fc" id="L118">        savingsGoalRepository.delete(goal)</span>
+<span class="fc" id="L119">    }</span>
+
+    private fun calculateProgress(goal: SavingsGoal): GoalResponse {
+<span class="fc" id="L122">        val today = LocalDate.now()</span>
+<span class="fc" id="L123">        val transactions = transactionRepository.findAllForGoalProgress(</span>
+<span class="fc" id="L124">            userId = goal.userId,</span>
+<span class="fc" id="L125">            startDate = goal.startDate,</span>
+<span class="fc" id="L126">            today = today</span>
+        )
+
+<span class="fc" id="L129">        var totalIncome = BigDecimal.ZERO</span>
+<span class="fc" id="L130">        var totalExpenses = BigDecimal.ZERO</span>
+
+<span class="fc bfc" id="L132" title="All 2 branches covered.">        for (t in transactions) {</span>
+<span class="fc bfc" id="L133" title="All 2 branches covered.">            if (t.category.type == CategoryType.INCOME) {</span>
+<span class="fc" id="L134">                totalIncome = totalIncome.add(t.amount)</span>
+<span class="pc bpc" id="L135" title="1 of 2 branches missed.">            } else if (t.category.type == CategoryType.EXPENSE) {</span>
+<span class="fc" id="L136">                totalExpenses = totalExpenses.add(t.amount)</span>
+            }
+        }
+
+<span class="fc" id="L140">        val currentProgress = totalIncome.subtract(totalExpenses)</span>
+
+<span class="pc bpc" id="L142" title="1 of 2 branches missed.">        val progressPercentage = if (goal.targetAmount &gt; BigDecimal.ZERO) {</span>
+<span class="fc" id="L143">            currentProgress.divide(goal.targetAmount, 4, RoundingMode.HALF_UP)</span>
+<span class="fc" id="L144">                .multiply(BigDecimal(100))</span>
+<span class="fc" id="L145">                .toDouble()</span>
+        } else {
+<span class="nc" id="L147">            0.0</span>
+        }
+
+<span class="fc" id="L150">        val remainingAmount = goal.targetAmount.subtract(currentProgress).max(BigDecimal.ZERO)</span>
+
+<span class="fc" id="L152">        return GoalResponse(</span>
+<span class="fc" id="L153">            id = goal.id!!,</span>
+<span class="fc" id="L154">            goalName = goal.goalName,</span>
+<span class="fc" id="L155">            targetAmount = goal.targetAmount,</span>
+<span class="fc" id="L156">            targetDate = goal.targetDate,</span>
+<span class="fc" id="L157">            startDate = goal.startDate,</span>
+<span class="fc" id="L158">            currentProgress = currentProgress,</span>
+<span class="fc" id="L159">            progressPercentage = progressPercentage,</span>
+<span class="fc" id="L160">            remainingAmount = remainingAmount</span>
+        )
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

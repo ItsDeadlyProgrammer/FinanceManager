@@ -1,0 +1,136 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>TransactionService.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.service</a> &gt; <span class="el_source">TransactionService.kt</span></div><h1>TransactionService.kt</h1><pre class="source lang-java linenums">package com.example.finance.service
+
+import com.example.finance.dto.transaction.TransactionListResponse
+import com.example.finance.dto.transaction.TransactionRequest
+import com.example.finance.dto.transaction.TransactionResponse
+import com.example.finance.dto.transaction.TransactionUpdateRequest
+import com.example.finance.entity.CategoryType
+import com.example.finance.entity.Transaction
+import com.example.finance.exception.BadRequestException
+import com.example.finance.exception.ForbiddenAccessException
+import com.example.finance.exception.ResourceNotFoundException
+import com.example.finance.repository.TransactionRepository
+import org.springframework.stereotype.Service
+import org.springframework.transaction.annotation.Transactional
+import java.math.BigDecimal
+import java.time.LocalDate
+
+@Service
+<span class="fc" id="L19">class TransactionService(</span>
+<span class="fc" id="L20">    private val transactionRepository: TransactionRepository,</span>
+<span class="fc" id="L21">    private val categoryService: CategoryService</span>
+) {
+
+    @Transactional
+    fun createTransaction(userId: Long, request: TransactionRequest): TransactionResponse {
+<span class="fc bfc" id="L26" title="All 2 branches covered.">        if (request.amount &lt;= BigDecimal.ZERO) {</span>
+<span class="fc" id="L27">            throw BadRequestException(&quot;Amount must be greater than zero&quot;)</span>
+        }
+<span class="fc bfc" id="L29" title="All 2 branches covered.">        if (request.date.isAfter(LocalDate.now())) {</span>
+<span class="fc" id="L30">            throw BadRequestException(&quot;Transaction date cannot be a future date&quot;)</span>
+        }
+
+<span class="fc" id="L33">        val category = categoryService.findCategoryForUser(request.category, userId)</span>
+
+<span class="fc" id="L35">        val transaction = Transaction(</span>
+<span class="fc" id="L36">            userId = userId,</span>
+<span class="fc" id="L37">            amount = request.amount,</span>
+<span class="fc" id="L38">            date = request.date,</span>
+<span class="fc" id="L39">            category = category,</span>
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            description = request.description?.trim(),</span>
+<span class="fc" id="L41">            isDeleted = false</span>
+        )
+<span class="fc" id="L43">        val saved = transactionRepository.save(transaction)</span>
+
+<span class="fc" id="L45">        return mapToResponse(saved)</span>
+    }
+
+    @Transactional(readOnly = true)
+    fun getTransactions(
+        userId: Long,
+        startDate: LocalDate?,
+        endDate: LocalDate?,
+        categoryId: Long?,
+        category: String?,
+        type: CategoryType?
+    ): TransactionListResponse {
+<span class="fc" id="L57">        val list = transactionRepository.findAllFiltered(</span>
+<span class="fc" id="L58">            userId = userId,</span>
+<span class="fc" id="L59">            startDate = startDate,</span>
+<span class="fc" id="L60">            endDate = endDate,</span>
+<span class="fc" id="L61">            categoryId = categoryId,</span>
+<span class="pc bpc" id="L62" title="1 of 2 branches missed.">            categoryName = category?.trim(),</span>
+<span class="fc" id="L63">            type = type</span>
+        )
+<span class="fc" id="L65">        return TransactionListResponse(transactions = list.map { mapToResponse(it) })</span>
+    }
+
+    @Transactional
+    fun updateTransaction(userId: Long, id: Long, request: TransactionUpdateRequest): TransactionResponse {
+<span class="fc" id="L70">        val existing = transactionRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L71">            ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+        }
+
+<span class="fc bfc" id="L74" title="All 2 branches covered.">        if (existing.userId != userId) {</span>
+<span class="fc" id="L75">            throw ForbiddenAccessException(&quot;User is not authorized to access this transaction&quot;)</span>
+        }
+
+<span class="pc bpc" id="L78" title="1 of 2 branches missed.">        if (existing.isDeleted) {</span>
+<span class="nc" id="L79">            throw ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+        }
+
+        // Check if client attempts to modify transaction date
+<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (request.date != null &amp;&amp; request.date != existing.date) {</span>
+<span class="fc" id="L84">            throw BadRequestException(&quot;Transaction date cannot be modified after creation&quot;)</span>
+        }
+
+<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (request.amount != null) {</span>
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (request.amount &lt;= BigDecimal.ZERO) {</span>
+<span class="nc" id="L89">                throw BadRequestException(&quot;Amount must be greater than zero&quot;)</span>
+            }
+<span class="fc" id="L91">            existing.amount = request.amount</span>
+        }
+
+<span class="pc bpc" id="L94" title="5 of 6 branches missed.">        if (request.category != null &amp;&amp; request.category.isNotBlank()) {</span>
+<span class="nc" id="L95">            val category = categoryService.findCategoryForUser(request.category, userId)</span>
+<span class="nc" id="L96">            existing.category = category</span>
+        }
+
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (request.description != null) {</span>
+<span class="fc" id="L100">            existing.description = request.description.trim()</span>
+        }
+
+<span class="fc" id="L103">        val updated = transactionRepository.save(existing)</span>
+<span class="fc" id="L104">        return mapToResponse(updated)</span>
+    }
+
+    @Transactional
+    fun deleteTransaction(userId: Long, id: Long) {
+<span class="fc" id="L109">        val existing = transactionRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L110">            ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+        }
+
+<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (existing.userId != userId) {</span>
+<span class="fc" id="L114">            throw ForbiddenAccessException(&quot;User is not authorized to access this transaction&quot;)</span>
+        }
+
+<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (existing.isDeleted) {</span>
+<span class="nc" id="L118">            throw ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+        }
+
+<span class="fc" id="L121">        existing.isDeleted = true</span>
+<span class="fc" id="L122">        transactionRepository.save(existing)</span>
+<span class="fc" id="L123">    }</span>
+
+    private fun mapToResponse(t: Transaction): TransactionResponse {
+<span class="fc" id="L126">        return TransactionResponse(</span>
+<span class="fc" id="L127">            id = t.id!!,</span>
+<span class="fc" id="L128">            amount = t.amount,</span>
+<span class="fc" id="L129">            date = t.date,</span>
+<span class="fc" id="L130">            category = t.category.name,</span>
+<span class="fc" id="L131">            description = t.description,</span>
+<span class="fc" id="L132">            type = t.category.type</span>
+        )
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

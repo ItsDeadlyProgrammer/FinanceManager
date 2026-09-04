@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CategoryController.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=4;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">personal-finance-manager</a> &gt; <a href="index.source.html" class="el_package">com.example.finance.controller</a> &gt; <span class="el_source">CategoryController.kt</span></div><h1>CategoryController.kt</h1><pre class="source lang-java linenums">package com.example.finance.controller
+
+import com.example.finance.dto.auth.MessageResponse
+import com.example.finance.dto.category.CategoryListResponse
+import com.example.finance.dto.category.CategoryRequest
+import com.example.finance.dto.category.CategoryResponse
+import com.example.finance.security.UserResolver
+import com.example.finance.service.CategoryService
+import io.swagger.v3.oas.annotations.Operation
+import io.swagger.v3.oas.annotations.tags.Tag
+import jakarta.validation.Valid
+import org.springframework.http.HttpStatus
+import org.springframework.http.ResponseEntity
+import org.springframework.security.core.Authentication
+import org.springframework.web.bind.annotation.*
+
+@RestController
+@RequestMapping(&quot;/api/categories&quot;)
+@Tag(name = &quot;Categories&quot;, description = &quot;Endpoints for managing transaction categories&quot;)
+<span class="fc" id="L20">class CategoryController(</span>
+<span class="fc" id="L21">    private val categoryService: CategoryService,</span>
+<span class="fc" id="L22">    private val userResolver: UserResolver</span>
+) {
+
+    @GetMapping
+    @Operation(summary = &quot;Get all categories available to the user&quot;)
+    fun getCategories(authentication: Authentication?): ResponseEntity&lt;CategoryListResponse&gt; {
+<span class="fc" id="L28">        val userId = userResolver.resolveUserId(authentication)</span>
+<span class="fc" id="L29">        val response = categoryService.getCategories(userId)</span>
+<span class="fc" id="L30">        return ResponseEntity.ok(response)</span>
+    }
+
+    @PostMapping
+    @Operation(summary = &quot;Create a new custom category&quot;)
+    fun createCategory(
+        authentication: Authentication?,
+        @Valid @RequestBody request: CategoryRequest
+    ): ResponseEntity&lt;CategoryResponse&gt; {
+<span class="fc" id="L39">        val userId = userResolver.resolveUserId(authentication)</span>
+<span class="fc" id="L40">        val response = categoryService.createCustomCategory(userId, request)</span>
+<span class="fc" id="L41">        return ResponseEntity.status(HttpStatus.CREATED).body(response)</span>
+    }
+
+    @DeleteMapping(&quot;/{name}&quot;)
+    @Operation(summary = &quot;Delete a custom category by name&quot;)
+    fun deleteCategory(
+        authentication: Authentication?,
+        @PathVariable name: String
+    ): ResponseEntity&lt;MessageResponse&gt; {
+<span class="fc" id="L50">        val userId = userResolver.resolveUserId(authentication)</span>
+<span class="fc" id="L51">        categoryService.deleteCustomCategory(userId, name)</span>
+<span class="fc" id="L52">        return ResponseEntity.ok(MessageResponse(&quot;Category deleted successfully&quot;))</span>
+    }
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

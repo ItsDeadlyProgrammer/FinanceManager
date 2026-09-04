@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.finance.integration.ReportControllerIntegrationTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:51.064Z" hostname="ITZHARSHU" time="0.293">
+  <properties/>
+  <testcase name="monthly report endpoint()" classname="com.example.finance.integration.ReportControllerIntegrationTest" time="0.162"/>
+  <testcase name="yearly report endpoint()" classname="com.example.finance.integration.ReportControllerIntegrationTest" time="0.116"/>
+  <system-out><![CDATA[2026-09-04T12:57:51.066+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.ReportControllerIntegrationTest]: ReportControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-04T12:57:51.070+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.ReportControllerIntegrationTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>

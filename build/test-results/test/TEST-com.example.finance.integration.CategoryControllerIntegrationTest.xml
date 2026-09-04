@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testsuite name="com.example.finance.integration.CategoryControllerIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:50.677Z" hostname="ITZHARSHU" time="0.386">
+  <properties/>
+  <testcase name="get default categories, create custom, delete custom()" classname="com.example.finance.integration.CategoryControllerIntegrationTest" time="0.371"/>
+  <system-out><![CDATA[2026-09-04T12:57:50.679+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.CategoryControllerIntegrationTest]: CategoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-04T12:57:50.685+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.CategoryControllerIntegrationTest
+]]></system-out>
+  <system-err><![CDATA[]]></system-err>
+</testsuite>
