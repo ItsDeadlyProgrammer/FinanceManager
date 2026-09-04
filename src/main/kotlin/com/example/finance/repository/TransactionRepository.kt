@@ -24,11 +24,11 @@ interface TransactionRepository : JpaRepository<Transaction, Long>, JpaSpecifica
         SELECT t FROM Transaction t
         WHERE t.userId = :userId
           AND t.isDeleted = false
-          AND (:startDate IS NULL OR t.date >= :startDate)
-          AND (:endDate IS NULL OR t.date <= :endDate)
-          AND (:categoryId IS NULL OR t.category.id = :categoryId)
-          AND (:categoryName IS NULL OR LOWER(CAST(t.category.name AS string)) = LOWER(CAST(:categoryName AS string)))
-          AND (:type IS NULL OR t.category.type = :type)
+          AND (CAST(:startDate AS string) IS NULL OR t.date >= :startDate)
+          AND (CAST(:endDate AS string) IS NULL OR t.date <= :endDate)
+          AND (CAST(:categoryId AS string) IS NULL OR t.category.id = :categoryId)
+          AND (CAST(:categoryName AS string) IS NULL OR LOWER(CAST(t.category.name AS string)) = LOWER(CAST(:categoryName AS string)))
+          AND (CAST(:type AS string) IS NULL OR t.category.type = :type)
         ORDER BY t.date DESC, t.id DESC
     """)
     fun findAllFiltered(
