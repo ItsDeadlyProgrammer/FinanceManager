@@ -2,6 +2,8 @@
 
 A production-quality **Personal Finance Manager** application built with Kotlin, Spring Boot 3.x, Spring Security (Session-based), Spring Data JPA, PostgreSQL / H2, Bean Validation, JaCoCo, Swagger UI, and a clean professional fintech web dashboard.
 
+**Live Demo**: [https://personal-finance-manager-zh7c.onrender.com/](https://personal-finance-manager-zh7c.onrender.com/)
+
 ---
 
 ## Features
@@ -46,6 +48,12 @@ PostgreSQL / H2
   - `findAllFiltered(userId, ...)`
 - Explicit integration test suite (`UserDataIsolationIntegrationTest`) verifies that User A cannot read, update, or delete User B's transactions, goals, categories, or reports.
 
+### Production Readiness & PostgreSQL Compatibility
+- **Database Agnostic Date Queries**: Avoids H2/PostgreSQL specific functions like `YEAR()` or `EXTRACT()`. Uses clean date-range comparisons compatible with all SQL dialects.
+- **Strict Type Safety**: Enforces `VARCHAR` mapping for string fields to prevent PostgreSQL `bytea` inference errors.
+- **Path Normalization**: Integrated `PathNormalizationFilter` to handle non-standard URLs (double slashes, trailing slashes) common in cloud environments and automated test suites.
+- **Parameter Type Casting**: Uses explicit JPQL casting (`CAST(:param AS string)`) to solve PostgreSQL parameter type inference issues for optional filters.
+
 ### Savings Goal Calculation
 - `currentProgress` = `total income - total expenses` considering user transactions where `goal.startDate <= transaction.date <= today`.
 - `progressPercentage` = `(currentProgress / targetAmount) * 100` (handles division by zero safely).
@@ -60,7 +68,7 @@ PostgreSQL / H2
 
 ## Tech Stack
 
-- **Language**: Kotlin 1.9.25 / Java 17+ (JDK 25 compatible)
+- **Language**: Kotlin 2.0.20 / Java 17+ (JDK 25 compatible)
 - **Framework**: Spring Boot 3.3.3
 - **Security**: Spring Security (BCrypt, Session Management)
 - **Persistence**: Spring Data JPA, Hibernate, PostgreSQL (production), H2 (local/tests)
@@ -178,14 +186,16 @@ Access the application in your browser:
 
 ## Environment Variables
 
-| Variable | Description | Default (Local) |
+| Variable | Description | Default / Example |
 |---|---|---|
 | `PORT` | Web server listening port | `8080` |
-| `DATABASE_URL` | PostgreSQL JDBC connection URL | `jdbc:h2:mem:financedb;MODE=PostgreSQL` |
-| `DB_USERNAME` | Database username | `sa` |
-| `DB_PASSWORD` | Database password | `` |
-| `DB_DRIVER` | Database JDBC driver class | `org.h2.Driver` (Production: `org.postgresql.Driver`) |
-| `DB_DIALECT` | Hibernate SQL dialect | `org.hibernate.dialect.H2Dialect` (Production: `org.hibernate.dialect.PostgreSQLDialect`) |
+| `DB_HOST` | Database host | `localhost` |
+| `DB_PORT` | Database port | `5432` |
+| `DB_NAME` | Database name | `financedb` |
+| `DB_USERNAME` | Database username | `postgres` |
+| `DB_PASSWORD` | Database password | `password` |
+| `DB_DRIVER` | Database JDBC driver class | `org.postgresql.Driver` |
+| `DB_DIALECT` | Hibernate SQL dialect | `org.hibernate.dialect.PostgreSQLDialect` |
 
 ---
 ## 👨‍💻 Author
