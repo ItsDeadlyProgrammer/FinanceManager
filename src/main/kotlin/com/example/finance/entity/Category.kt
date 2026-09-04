@@ -15,7 +15,7 @@ class Category(
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     var id: Long? = null,
 
-    @Column(nullable = false)
+    @Column(nullable = false, columnDefinition = "VARCHAR(255)")
     var name: String = "",
 
     @Enumerated(EnumType.STRING)

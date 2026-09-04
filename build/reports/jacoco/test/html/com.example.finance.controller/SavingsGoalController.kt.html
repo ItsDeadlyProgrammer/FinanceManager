@@ -16,7 +16,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(&quot;/api/goals&quot;)
+@RequestMapping(value = [&quot;/api/goals&quot;, &quot;/goals&quot;])
 @Tag(name = &quot;Savings Goals&quot;, description = &quot;Endpoints for managing savings goals and tracking progress&quot;)
 <span class="fc" id="L21">class SavingsGoalController(</span>
 <span class="fc" id="L22">    private val savingsGoalService: SavingsGoalService,</span>

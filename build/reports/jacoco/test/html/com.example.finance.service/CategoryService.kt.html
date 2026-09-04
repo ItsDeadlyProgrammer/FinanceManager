@@ -25,7 +25,7 @@ import org.springframework.transaction.annotation.Transactional
 <span class="fc" id="L25">            CategoryResponse(</span>
 <span class="fc" id="L26">                name = it.name,</span>
 <span class="fc" id="L27">                type = it.type,</span>
-<span class="fc" id="L28">                isCustom = it.isCustom</span>
+<span class="fc" id="L28">                custom = it.isCustom</span>
 <span class="fc" id="L29">            )</span>
         }
 <span class="fc" id="L31">        return CategoryListResponse(categories = dtos)</span>
@@ -55,7 +55,7 @@ import org.springframework.transaction.annotation.Transactional
 <span class="fc" id="L55">        return CategoryResponse(</span>
 <span class="fc" id="L56">            name = saved.name,</span>
 <span class="fc" id="L57">            type = saved.type,</span>
-<span class="fc" id="L58">            isCustom = saved.isCustom</span>
+<span class="fc" id="L58">            custom = saved.isCustom</span>
         )
     }
 

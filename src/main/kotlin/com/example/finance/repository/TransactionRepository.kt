@@ -17,7 +17,7 @@ interface TransactionRepository : JpaRepository<Transaction, Long>, JpaSpecifica
     @Query("SELECT COUNT(t) FROM Transaction t WHERE t.category.id = :categoryId AND t.isDeleted = false")
     fun countByCategoryIdAndIsDeletedFalse(categoryId: Long): Long
 
-    @Query("SELECT COUNT(t) FROM Transaction t WHERE LOWER(t.category.name) = LOWER(:categoryName) AND t.isDeleted = false")
+    @Query("SELECT COUNT(t) FROM Transaction t WHERE LOWER(CAST(t.category.name AS string)) = LOWER(CAST(:categoryName AS string)) AND t.isDeleted = false")
     fun countByCategoryNameAndIsDeletedFalse(categoryName: String): Long
 
     @Query("""
@@ -27,7 +27,7 @@ interface TransactionRepository : JpaRepository<Transaction, Long>, JpaSpecifica
           AND (:startDate IS NULL OR t.date >= :startDate)
           AND (:endDate IS NULL OR t.date <= :endDate)
           AND (:categoryId IS NULL OR t.category.id = :categoryId)
-          AND (:categoryName IS NULL OR LOWER(t.category.name) = LOWER(:categoryName))
+          AND (:categoryName IS NULL OR LOWER(CAST(t.category.name AS string)) = LOWER(CAST(:categoryName AS string)))
           AND (:type IS NULL OR t.category.type = :type)
         ORDER BY t.date DESC, t.id DESC
     """)
@@ -53,16 +53,8 @@ interface TransactionRepository : JpaRepository<Transaction, Long>, JpaSpecifica
         SELECT t FROM Transaction t
         WHERE t.userId = :userId
           AND t.isDeleted = false
-          AND FUNCTION('YEAR', t.date) = :year
-          AND FUNCTION('MONTH', t.date) = :month
+          AND t.date >= :startDate
+          AND t.date <= :endDate
     """)
-    fun findAllByUserIdAndYearAndMonth(userId: Long, year: Int, month: Int): List<Transaction>
-
-    @Query("""
-        SELECT t FROM Transaction t
-        WHERE t.userId = :userId
-          AND t.isDeleted = false
-          AND FUNCTION('YEAR', t.date) = :year
-    """)
-    fun findAllByUserIdAndYear(userId: Long, year: Int): List<Transaction>
+    fun findAllByUserIdAndDateBetween(userId: Long, startDate: LocalDate, endDate: LocalDate): List<Transaction>
 }

@@ -46,7 +46,7 @@ class CategoryControllerIntegrationTest {
         )
             .andExpect(status().isOk)
             .andExpect(jsonPath("$.categories").isArray)
-            .andExpect(jsonPath("$.categories[?(@.name == 'Salary')].isCustom").value(false))
+            .andExpect(jsonPath("$.categories[?(@.name == 'Salary')].custom").value(false))
 
         val catReq = CategoryRequest("SideBusinessIncome", CategoryType.INCOME)
         mockMvc.perform(
@@ -57,7 +57,7 @@ class CategoryControllerIntegrationTest {
         )
             .andExpect(status().isCreated)
             .andExpect(jsonPath("$.name").value("SideBusinessIncome"))
-            .andExpect(jsonPath("$.isCustom").value(true))
+            .andExpect(jsonPath("$.custom").value(true))
 
         mockMvc.perform(
             post("/api/categories")

@@ -79,57 +79,55 @@ import java.time.LocalDate
 <span class="nc" id="L79">            throw ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
         }
 
-        // Check if client attempts to modify transaction date
-<span class="pc bpc" id="L83" title="1 of 4 branches missed.">        if (request.date != null &amp;&amp; request.date != existing.date) {</span>
-<span class="fc" id="L84">            throw BadRequestException(&quot;Transaction date cannot be modified after creation&quot;)</span>
-        }
+        // The requirement says date field cannot be updated, and should be ignored if provided.
+        // So we just don't update it.
 
-<span class="pc bpc" id="L87" title="1 of 2 branches missed.">        if (request.amount != null) {</span>
-<span class="pc bpc" id="L88" title="1 of 2 branches missed.">            if (request.amount &lt;= BigDecimal.ZERO) {</span>
-<span class="nc" id="L89">                throw BadRequestException(&quot;Amount must be greater than zero&quot;)</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">        if (request.amount != null) {</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">            if (request.amount &lt;= BigDecimal.ZERO) {</span>
+<span class="nc" id="L87">                throw BadRequestException(&quot;Amount must be greater than zero&quot;)</span>
             }
-<span class="fc" id="L91">            existing.amount = request.amount</span>
+<span class="fc" id="L89">            existing.amount = request.amount</span>
         }
 
-<span class="pc bpc" id="L94" title="5 of 6 branches missed.">        if (request.category != null &amp;&amp; request.category.isNotBlank()) {</span>
-<span class="nc" id="L95">            val category = categoryService.findCategoryForUser(request.category, userId)</span>
-<span class="nc" id="L96">            existing.category = category</span>
+<span class="pc bpc" id="L92" title="5 of 6 branches missed.">        if (request.category != null &amp;&amp; request.category.isNotBlank()) {</span>
+<span class="nc" id="L93">            val category = categoryService.findCategoryForUser(request.category, userId)</span>
+<span class="nc" id="L94">            existing.category = category</span>
         }
 
-<span class="pc bpc" id="L99" title="1 of 2 branches missed.">        if (request.description != null) {</span>
-<span class="fc" id="L100">            existing.description = request.description.trim()</span>
+<span class="fc bfc" id="L97" title="All 2 branches covered.">        if (request.description != null) {</span>
+<span class="fc" id="L98">            existing.description = request.description.trim()</span>
         }
 
-<span class="fc" id="L103">        val updated = transactionRepository.save(existing)</span>
-<span class="fc" id="L104">        return mapToResponse(updated)</span>
+<span class="fc" id="L101">        val updated = transactionRepository.save(existing)</span>
+<span class="fc" id="L102">        return mapToResponse(updated)</span>
     }
 
     @Transactional
     fun deleteTransaction(userId: Long, id: Long) {
-<span class="fc" id="L109">        val existing = transactionRepository.findById(id).orElseThrow {</span>
-<span class="nc" id="L110">            ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+<span class="fc" id="L107">        val existing = transactionRepository.findById(id).orElseThrow {</span>
+<span class="nc" id="L108">            ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
         }
 
-<span class="fc bfc" id="L113" title="All 2 branches covered.">        if (existing.userId != userId) {</span>
-<span class="fc" id="L114">            throw ForbiddenAccessException(&quot;User is not authorized to access this transaction&quot;)</span>
+<span class="fc bfc" id="L111" title="All 2 branches covered.">        if (existing.userId != userId) {</span>
+<span class="fc" id="L112">            throw ForbiddenAccessException(&quot;User is not authorized to access this transaction&quot;)</span>
         }
 
-<span class="pc bpc" id="L117" title="1 of 2 branches missed.">        if (existing.isDeleted) {</span>
-<span class="nc" id="L118">            throw ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
+<span class="pc bpc" id="L115" title="1 of 2 branches missed.">        if (existing.isDeleted) {</span>
+<span class="nc" id="L116">            throw ResourceNotFoundException(&quot;Transaction with id $id not found&quot;)</span>
         }
 
-<span class="fc" id="L121">        existing.isDeleted = true</span>
-<span class="fc" id="L122">        transactionRepository.save(existing)</span>
-<span class="fc" id="L123">    }</span>
+<span class="fc" id="L119">        existing.isDeleted = true</span>
+<span class="fc" id="L120">        transactionRepository.save(existing)</span>
+<span class="fc" id="L121">    }</span>
 
     private fun mapToResponse(t: Transaction): TransactionResponse {
-<span class="fc" id="L126">        return TransactionResponse(</span>
-<span class="fc" id="L127">            id = t.id!!,</span>
-<span class="fc" id="L128">            amount = t.amount,</span>
-<span class="fc" id="L129">            date = t.date,</span>
-<span class="fc" id="L130">            category = t.category.name,</span>
-<span class="fc" id="L131">            description = t.description,</span>
-<span class="fc" id="L132">            type = t.category.type</span>
+<span class="fc" id="L124">        return TransactionResponse(</span>
+<span class="fc" id="L125">            id = t.id!!,</span>
+<span class="fc" id="L126">            amount = t.amount,</span>
+<span class="fc" id="L127">            date = t.date,</span>
+<span class="fc" id="L128">            category = t.category.name,</span>
+<span class="fc" id="L129">            description = t.description,</span>
+<span class="fc" id="L130">            type = t.category.type</span>
         )
     }
 }

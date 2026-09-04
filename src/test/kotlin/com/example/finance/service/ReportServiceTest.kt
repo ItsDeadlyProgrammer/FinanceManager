@@ -30,7 +30,7 @@ class ReportServiceTest {
         val t1 = Transaction(1L, 10L, BigDecimal("3000.00"), LocalDate.of(2026, 1, 15), catSalary)
         val t2 = Transaction(2L, 10L, BigDecimal("400.00"), LocalDate.of(2026, 1, 20), catFood)
 
-        every { transactionRepository.findAllByUserIdAndYearAndMonth(10L, 2026, 1) } returns listOf(t1, t2)
+        every { transactionRepository.findAllByUserIdAndDateBetween(10L, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 1, 31)) } returns listOf(t1, t2)
 
         val res = reportService.getMonthlyReport(10L, 2026, 1)
 
@@ -49,7 +49,7 @@ class ReportServiceTest {
         val t1 = Transaction(1L, 10L, BigDecimal("50000.00"), LocalDate.of(2026, 6, 1), catSalary)
         val t2 = Transaction(2L, 10L, BigDecimal("12000.00"), LocalDate.of(2026, 6, 2), catRent)
 
-        every { transactionRepository.findAllByUserIdAndYear(10L, 2026) } returns listOf(t1, t2)
+        every { transactionRepository.findAllByUserIdAndDateBetween(10L, LocalDate.of(2026, 1, 1), LocalDate.of(2026, 12, 31)) } returns listOf(t1, t2)
 
         val res = reportService.getYearlyReport(10L, 2026)
 

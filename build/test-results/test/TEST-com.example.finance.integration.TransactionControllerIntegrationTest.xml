@@ -1,9 +1,9 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.integration.TransactionControllerIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:51.672Z" hostname="ITZHARSHU" time="0.225">
+<testsuite name="com.example.finance.integration.TransactionControllerIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:48.169Z" hostname="ITZHARSHU" time="0.288">
   <properties/>
-  <testcase name="create, get, update, delete transaction flow()" classname="com.example.finance.integration.TransactionControllerIntegrationTest" time="0.213"/>
-  <system-out><![CDATA[2026-09-04T12:57:51.674+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.TransactionControllerIntegrationTest]: TransactionControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-09-04T12:57:51.678+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.TransactionControllerIntegrationTest
+  <testcase name="create, get, update, delete transaction flow()" classname="com.example.finance.integration.TransactionControllerIntegrationTest" time="0.269"/>
+  <system-out><![CDATA[2026-09-04T16:58:48.174+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.TransactionControllerIntegrationTest]: TransactionControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-04T16:58:48.181+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.TransactionControllerIntegrationTest
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

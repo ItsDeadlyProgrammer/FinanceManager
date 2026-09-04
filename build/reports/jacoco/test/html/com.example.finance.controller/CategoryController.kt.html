@@ -15,7 +15,7 @@ import org.springframework.security.core.Authentication
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(&quot;/api/categories&quot;)
+@RequestMapping(value = [&quot;/api/categories&quot;, &quot;/categories&quot;])
 @Tag(name = &quot;Categories&quot;, description = &quot;Endpoints for managing transaction categories&quot;)
 <span class="fc" id="L20">class CategoryController(</span>
 <span class="fc" id="L21">    private val categoryService: CategoryService,</span>

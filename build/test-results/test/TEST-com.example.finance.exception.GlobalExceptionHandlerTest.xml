@@ -1,14 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.exception.GlobalExceptionHandlerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:37.434Z" hostname="ITZHARSHU" time="0.3">
+<testsuite name="com.example.finance.exception.GlobalExceptionHandlerTest" tests="8" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:46.987Z" hostname="ITZHARSHU" time="0.024">
   <properties/>
-  <testcase name="handleNotFound()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.202"/>
-  <testcase name="handleHttpMessageNotReadable()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.009"/>
-  <testcase name="handleForbidden()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.017"/>
-  <testcase name="handleUnauthorized()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.03"/>
-  <testcase name="handleConflict()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.013"/>
+  <testcase name="handleNotFound()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.001"/>
+  <testcase name="handleHttpMessageNotReadable()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.002"/>
+  <testcase name="handleForbidden()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.001"/>
+  <testcase name="handleUnauthorized()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.002"/>
+  <testcase name="handleConflict()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.002"/>
   <testcase name="handleGeneral()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.001"/>
   <testcase name="handleAccessDenied()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.002"/>
-  <testcase name="handleBadRequest()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.014"/>
+  <testcase name="handleBadRequest()" classname="com.example.finance.exception.GlobalExceptionHandlerTest" time="0.001"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

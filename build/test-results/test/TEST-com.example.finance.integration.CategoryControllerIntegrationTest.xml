@@ -1,9 +1,36 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.integration.CategoryControllerIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:50.677Z" hostname="ITZHARSHU" time="0.386">
+<testsuite name="com.example.finance.integration.CategoryControllerIntegrationTest" tests="1" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:31.216Z" hostname="ITZHARSHU" time="14.376">
   <properties/>
-  <testcase name="get default categories, create custom, delete custom()" classname="com.example.finance.integration.CategoryControllerIntegrationTest" time="0.371"/>
-  <system-out><![CDATA[2026-09-04T12:57:50.679+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.CategoryControllerIntegrationTest]: CategoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-09-04T12:57:50.685+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.CategoryControllerIntegrationTest
+  <testcase name="get default categories, create custom, delete custom()" classname="com.example.finance.integration.CategoryControllerIntegrationTest" time="1.498"/>
+  <system-out><![CDATA[16:58:31.730 [Test worker] INFO org.springframework.test.context.support.AnnotationConfigContextLoaderUtils -- Could not detect default configuration classes for test class [com.example.finance.integration.CategoryControllerIntegrationTest]: CategoryControllerIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+16:58:32.055 [Test worker] INFO org.springframework.boot.test.context.SpringBootTestContextBootstrapper -- Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.CategoryControllerIntegrationTest
+2026-09-04T16:58:33.211+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .e.f.i.CategoryControllerIntegrationTest : Starting CategoryControllerIntegrationTest using Java 21.0.10 with PID 8448 (started by Lenovo in C:\Users\Lenovo\.gemini\antigravity\scratch\personal-finance-manager)
+2026-09-04T16:58:33.218+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .e.f.i.CategoryControllerIntegrationTest : The following 1 profile is active: "test"
+2026-09-04T16:58:35.451+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Bootstrapping Spring Data JPA repositories in DEFAULT mode.
+2026-09-04T16:58:35.558+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .s.d.r.c.RepositoryConfigurationDelegate : Finished Spring Data repository scanning in 92 ms. Found 4 JPA repository interfaces.
+2026-09-04T16:58:36.435+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.hibernate.jpa.internal.util.LogHelper  : HHH000204: Processing PersistenceUnitInfo [name: default]
+2026-09-04T16:58:36.601+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] org.hibernate.Version                    : HHH000412: Hibernate ORM core version 6.5.2.Final
+2026-09-04T16:58:36.731+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.h.c.internal.RegionFactoryInitiator    : HHH000026: Second-level cache disabled
+2026-09-04T16:58:37.317+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.o.j.p.SpringPersistenceUnitInfo      : No LoadTimeWeaver setup: ignoring JPA class transformer
+2026-09-04T16:58:37.368+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Starting...
+2026-09-04T16:58:37.820+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] com.zaxxer.hikari.pool.HikariPool        : HikariPool-1 - Added connection conn0: url=jdbc:h2:mem:testdb user=SA
+2026-09-04T16:58:37.824+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] com.zaxxer.hikari.HikariDataSource       : HikariPool-1 - Start completed.
+2026-09-04T16:58:37.880+05:30  WARN 8448 --- [personal-finance-manager-test] [    Test worker] org.hibernate.orm.deprecation            : HHH90000025: H2Dialect does not need to be specified explicitly using 'hibernate.dialect' (remove the property setting and it will be selected by default)
+2026-09-04T16:58:39.691+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.h.e.t.j.p.i.JtaPlatformInitiator       : HHH000489: No JTA platform available (set 'hibernate.transaction.jta.platform' to enable JTA platform integration)
+2026-09-04T16:58:39.820+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] j.LocalContainerEntityManagerFactoryBean : Initialized JPA EntityManagerFactory for persistence unit 'default'
+2026-09-04T16:58:40.668+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.d.j.r.query.QueryEnhancerFactory     : Hibernate is in classpath; If applicable, HQL parser will be used.
+2026-09-04T16:58:41.858+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] r$InitializeUserDetailsManagerConfigurer : Global AuthenticationManager configured with UserDetailsService bean with name customUserDetailsService
+2026-09-04T16:58:42.566+05:30  WARN 8448 --- [personal-finance-manager-test] [    Test worker] JpaBaseConfiguration$JpaWebConfiguration : spring.jpa.open-in-view is enabled by default. Therefore, database queries may be performed during view rendering. Explicitly configure spring.jpa.open-in-view to disable this warning
+2026-09-04T16:58:42.711+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.b.a.w.s.WelcomePageHandlerMapping    : Adding welcome page: class path resource [static/index.html]
+2026-09-04T16:58:43.623+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.b.a.h2.H2ConsoleAutoConfiguration    : H2 console available at '/h2-console'. Database available at 'jdbc:h2:mem:testdb'
+2026-09-04T16:58:43.735+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.b.t.m.w.SpringBootMockServletContext : Initializing Spring TestDispatcherServlet ''
+2026-09-04T16:58:43.735+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Initializing Servlet ''
+2026-09-04T16:58:43.736+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] o.s.t.web.servlet.TestDispatcherServlet  : Completed initialization in 1 ms
+2026-09-04T16:58:43.771+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .e.f.i.CategoryControllerIntegrationTest : Started CategoryControllerIntegrationTest in 11.212 seconds (process running for 14.502)
 ]]></system-out>
-  <system-err><![CDATA[]]></system-err>
+  <system-err><![CDATA[WARNING: A Java agent has been loaded dynamically (C:\Users\Lenovo\.gradle\caches\modules-2\files-2.1\net.bytebuddy\byte-buddy-agent\1.14.19\154da3a65b4f4a909d3e5bdec55d1b2b4cbb6ce1\byte-buddy-agent-1.14.19.jar)
+WARNING: If a serviceability tool is in use, please run with -XX:+EnableDynamicAgentLoading to hide this warning
+WARNING: If a serviceability tool is not in use, please run with -Djdk.instrument.traceUsage for more information
+WARNING: Dynamic loading of agents will be disallowed by default in a future release
+]]></system-err>
 </testsuite>

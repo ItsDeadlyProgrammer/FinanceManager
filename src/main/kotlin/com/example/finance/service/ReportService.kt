@@ -8,6 +8,8 @@ import com.example.finance.repository.TransactionRepository
 import org.springframework.stereotype.Service
 import org.springframework.transaction.annotation.Transactional
 import java.math.BigDecimal
+import java.time.LocalDate
+import java.time.YearMonth
 
 @Service
 class ReportService(
@@ -23,7 +25,11 @@ class ReportService(
             throw BadRequestException("Invalid year: $year")
         }
 
-        val transactions = transactionRepository.findAllByUserIdAndYearAndMonth(userId, year, month)
+        val yearMonth = YearMonth.of(year, month)
+        val startDate = yearMonth.atDay(1)
+        val endDate = yearMonth.atEndOfMonth()
+
+        val transactions = transactionRepository.findAllByUserIdAndDateBetween(userId, startDate, endDate)
 
         val totalIncomeMap = mutableMapOf<String, BigDecimal>()
         val totalExpensesMap = mutableMapOf<String, BigDecimal>()
@@ -60,7 +66,10 @@ class ReportService(
             throw BadRequestException("Invalid year: $year")
         }
 
-        val transactions = transactionRepository.findAllByUserIdAndYear(userId, year)
+        val startDate = LocalDate.of(year, 1, 1)
+        val endDate = LocalDate.of(year, 12, 31)
+
+        val transactions = transactionRepository.findAllByUserIdAndDateBetween(userId, startDate, endDate)
 
         val totalIncomeMap = mutableMapOf<String, BigDecimal>()
         val totalExpensesMap = mutableMapOf<String, BigDecimal>()

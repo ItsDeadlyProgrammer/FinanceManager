@@ -2,6 +2,7 @@
 
 import com.example.finance.dto.auth.LoginRequest
 import com.example.finance.dto.auth.LoginResponse
+import com.example.finance.dto.auth.MessageResponse
 import com.example.finance.dto.auth.RegisterRequest
 import com.example.finance.dto.auth.RegisterResponse
 import com.example.finance.service.AuthService
@@ -12,20 +13,21 @@ import jakarta.servlet.http.HttpServletResponse
 import jakarta.validation.Valid
 import org.springframework.http.HttpStatus
 import org.springframework.http.ResponseEntity
+import org.springframework.security.core.context.SecurityContextHolder
 import org.springframework.web.bind.annotation.*
 
 @RestController
-@RequestMapping(&quot;/api/auth&quot;)
+@RequestMapping(value = [&quot;/api/auth&quot;, &quot;/auth&quot;])
 @Tag(name = &quot;Authentication&quot;, description = &quot;Endpoints for user registration, login, and logout&quot;)
-<span class="fc" id="L20">class AuthController(</span>
-<span class="fc" id="L21">    private val authService: AuthService</span>
+<span class="fc" id="L22">class AuthController(</span>
+<span class="fc" id="L23">    private val authService: AuthService</span>
 ) {
 
     @PostMapping(&quot;/register&quot;)
     @Operation(summary = &quot;Register a new user&quot;)
     fun register(@Valid @RequestBody request: RegisterRequest): ResponseEntity&lt;RegisterResponse&gt; {
-<span class="fc" id="L27">        val response = authService.register(request)</span>
-<span class="fc" id="L28">        return ResponseEntity.status(HttpStatus.CREATED).body(response)</span>
+<span class="fc" id="L29">        val response = authService.register(request)</span>
+<span class="fc" id="L30">        return ResponseEntity.status(HttpStatus.CREATED).body(response)</span>
     }
 
     @PostMapping(&quot;/login&quot;)
@@ -35,8 +37,21 @@ import org.springframework.web.bind.annotation.*
         httpRequest: HttpServletRequest,
         httpResponse: HttpServletResponse
     ): ResponseEntity&lt;LoginResponse&gt; {
-<span class="fc" id="L38">        val response = authService.login(request, httpRequest, httpResponse)</span>
-<span class="fc" id="L39">        return ResponseEntity.ok(response)</span>
+<span class="fc" id="L40">        val response = authService.login(request, httpRequest, httpResponse)</span>
+<span class="fc" id="L41">        return ResponseEntity.ok(response)</span>
+    }
+
+    @PostMapping(&quot;/logout&quot;)
+    @Operation(summary = &quot;Logout user and invalidate session&quot;)
+    fun logout(httpRequest: HttpServletRequest, httpResponse: HttpServletResponse): ResponseEntity&lt;MessageResponse&gt; {
+<span class="fc" id="L47">        val session = httpRequest.getSession(false)</span>
+<span class="pc bpc" id="L48" title="1 of 2 branches missed.">        session?.invalidate()</span>
+<span class="fc" id="L49">        SecurityContextHolder.clearContext()</span>
+<span class="fc" id="L50">        val cookie = jakarta.servlet.http.Cookie(&quot;JSESSIONID&quot;, &quot;&quot;)</span>
+<span class="fc" id="L51">        cookie.maxAge = 0</span>
+<span class="fc" id="L52">        cookie.path = &quot;/&quot;</span>
+<span class="fc" id="L53">        httpResponse.addCookie(cookie)</span>
+<span class="fc" id="L54">        return ResponseEntity.ok(MessageResponse(&quot;Logout successful&quot;))</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

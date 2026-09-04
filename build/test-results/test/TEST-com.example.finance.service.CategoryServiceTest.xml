@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.service.CategoryServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:53.663Z" hostname="ITZHARSHU" time="0.425">
+<testsuite name="com.example.finance.service.CategoryServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:50.270Z" hostname="ITZHARSHU" time="0.34">
   <properties/>
   <testcase name="deleteCustomCategory non referenced success()" classname="com.example.finance.service.CategoryServiceTest" time="0.066"/>
-  <testcase name="getCategories returns default and user custom categories()" classname="com.example.finance.service.CategoryServiceTest" time="0.153"/>
+  <testcase name="getCategories returns default and user custom categories()" classname="com.example.finance.service.CategoryServiceTest" time="0.185"/>
   <testcase name="createCustomCategory success()" classname="com.example.finance.service.CategoryServiceTest" time="0.011"/>
-  <testcase name="createCustomCategory duplicate name throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.004"/>
-  <testcase name="deleteCustomCategory referenced category throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.007"/>
-  <testcase name="deleteCustomCategory default category throws BadRequestException()" classname="com.example.finance.service.CategoryServiceTest" time="0.003"/>
+  <testcase name="createCustomCategory duplicate name throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.018"/>
+  <testcase name="deleteCustomCategory referenced category throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.024"/>
+  <testcase name="deleteCustomCategory default category throws BadRequestException()" classname="com.example.finance.service.CategoryServiceTest" time="0.01"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

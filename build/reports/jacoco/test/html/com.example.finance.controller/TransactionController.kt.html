@@ -19,7 +19,7 @@ import org.springframework.web.bind.annotation.*
 import java.time.LocalDate
 
 @RestController
-@RequestMapping(&quot;/api/transactions&quot;)
+@RequestMapping(value = [&quot;/api/transactions&quot;, &quot;/transactions&quot;])
 @Tag(name = &quot;Transactions&quot;, description = &quot;Endpoints for managing financial transactions&quot;)
 <span class="fc" id="L24">class TransactionController(</span>
 <span class="fc" id="L25">    private val transactionService: TransactionService,</span>

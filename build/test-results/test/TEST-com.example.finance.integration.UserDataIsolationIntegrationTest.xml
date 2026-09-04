@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.integration.UserDataIsolationIntegrationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:51.899Z" hostname="ITZHARSHU" time="0.731">
+<testsuite name="com.example.finance.integration.UserDataIsolationIntegrationTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:48.460Z" hostname="ITZHARSHU" time="0.841">
   <properties/>
-  <testcase name="Unauthenticated requests return 401 Unauthorized()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.169"/>
-  <testcase name="User A cannot get, update, or delete User B goal()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.195"/>
-  <testcase name="User A cannot delete User B custom category()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.173"/>
-  <testcase name="User A cannot update or delete User B transaction()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.181"/>
-  <system-out><![CDATA[2026-09-04T12:57:51.900+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.UserDataIsolationIntegrationTest]: UserDataIsolationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
-2026-09-04T12:57:51.903+05:30  INFO 14240 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.UserDataIsolationIntegrationTest
+  <testcase name="Unauthenticated requests return 401 Unauthorized()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.2"/>
+  <testcase name="User A cannot get, update, or delete User B goal()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.232"/>
+  <testcase name="User A cannot delete User B custom category()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.19"/>
+  <testcase name="User A cannot update or delete User B transaction()" classname="com.example.finance.integration.UserDataIsolationIntegrationTest" time="0.194"/>
+  <system-out><![CDATA[2026-09-04T16:58:48.462+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] t.c.s.AnnotationConfigContextLoaderUtils : Could not detect default configuration classes for test class [com.example.finance.integration.UserDataIsolationIntegrationTest]: UserDataIsolationIntegrationTest does not declare any static, non-private, non-final, nested classes annotated with @Configuration.
+2026-09-04T16:58:48.469+05:30  INFO 8448 --- [personal-finance-manager-test] [    Test worker] .b.t.c.SpringBootTestContextBootstrapper : Found @SpringBootConfiguration com.example.finance.PersonalFinanceApplication for test class com.example.finance.integration.UserDataIsolationIntegrationTest
 ]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

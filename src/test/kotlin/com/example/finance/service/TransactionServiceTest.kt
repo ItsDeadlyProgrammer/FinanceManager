@@ -81,7 +81,7 @@ class TransactionServiceTest {
     }
 
     @Test
-    fun `updateTransaction date modification attempt throws BadRequestException`() {
+    fun `updateTransaction date modification attempt ignores date`() {
         val cat = Category(1L, "Food", CategoryType.EXPENSE, null, false)
         val existing = Transaction(
             id = 100L,
@@ -92,15 +92,17 @@ class TransactionServiceTest {
         )
 
         every { transactionRepository.findById(100L) } returns Optional.of(existing)
+        every { transactionRepository.save(any()) } answers { firstArg() }
 
         val req = TransactionUpdateRequest(
             amount = BigDecimal("60.00"),
             date = LocalDate.of(2026, 1, 2)
         )
 
-        assertThrows(BadRequestException::class.java) {
-            transactionService.updateTransaction(10L, 100L, req)
-        }
+        val res = transactionService.updateTransaction(10L, 100L, req)
+
+        assertEquals(BigDecimal("60.00"), res.amount)
+        assertEquals(LocalDate.of(2026, 1, 1), res.date) // Should remain unchanged
     }
 
     @Test

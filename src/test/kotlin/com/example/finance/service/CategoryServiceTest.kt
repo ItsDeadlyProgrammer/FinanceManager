@@ -36,9 +36,9 @@ class CategoryServiceTest {
 
         assertEquals(2, res.categories.size)
         assertEquals("Salary", res.categories[0].name)
-        assertFalse(res.categories[0].isCustom)
+        assertFalse(res.categories[0].custom)
         assertEquals("SideBiz", res.categories[1].name)
-        assertTrue(res.categories[1].isCustom)
+        assertTrue(res.categories[1].custom)
     }
 
     @Test
@@ -57,7 +57,7 @@ class CategoryServiceTest {
 
         assertEquals("Consulting", res.name)
         assertEquals(CategoryType.INCOME, res.type)
-        assertTrue(res.isCustom)
+        assertTrue(res.custom)
     }
 
     @Test

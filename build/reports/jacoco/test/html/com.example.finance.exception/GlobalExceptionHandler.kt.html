@@ -11,96 +11,120 @@ import org.springframework.web.bind.MethodArgumentNotValidException
 import org.springframework.web.bind.annotation.ControllerAdvice
 import org.springframework.web.bind.annotation.ExceptionHandler
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException
+import org.springframework.web.servlet.resource.NoResourceFoundException
+import org.springframework.web.HttpRequestMethodNotSupportedException
+import org.springframework.web.bind.MissingServletRequestParameterException
 
-<span class="fc" id="L15">@ControllerAdvice</span>
+<span class="fc" id="L18">@ControllerAdvice</span>
 class GlobalExceptionHandler {
+
+    @ExceptionHandler(NoResourceFoundException::class)
+    fun handleNoResourceFound(ex: NoResourceFoundException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L23">        return ResponseEntity</span>
+<span class="nc" id="L24">            .status(HttpStatus.NOT_FOUND)</span>
+<span class="nc bnc" id="L25" title="All 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.NOT_FOUND.value(), message = ex.message ?: &quot;Resource not found&quot;))</span>
+    }
+
+    @ExceptionHandler(HttpRequestMethodNotSupportedException::class)
+    fun handleMethodNotSupported(ex: HttpRequestMethodNotSupportedException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L30">        return ResponseEntity</span>
+<span class="nc" id="L31">            .status(HttpStatus.METHOD_NOT_ALLOWED)</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.METHOD_NOT_ALLOWED.value(), message = ex.message ?: &quot;Method not allowed&quot;))</span>
+    }
+
+    @ExceptionHandler(MissingServletRequestParameterException::class)
+    fun handleMissingParams(ex: MissingServletRequestParameterException): ResponseEntity&lt;ErrorResponse&gt; {
+<span class="nc" id="L37">        return ResponseEntity</span>
+<span class="nc" id="L38">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L39">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Missing parameter: ${ex.parameterName}&quot;))</span>
+    }
 
     @ExceptionHandler(MethodArgumentNotValidException::class)
     fun handleValidationException(ex: MethodArgumentNotValidException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="nc" id="L20">        val errorMessage = ex.bindingResult.fieldErrors</span>
-<span class="nc" id="L21">            .joinToString(&quot;; &quot;) { &quot;${it.field}: ${it.defaultMessage}&quot; }</span>
-<span class="nc bnc" id="L22" title="All 4 branches missed.">            .ifEmpty { &quot;Validation error&quot; }</span>
-<span class="nc" id="L23">        return ResponseEntity</span>
-<span class="nc" id="L24">            .status(HttpStatus.BAD_REQUEST)</span>
-<span class="nc" id="L25">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = errorMessage))</span>
+<span class="nc" id="L44">        val errorMessage = ex.bindingResult.fieldErrors</span>
+<span class="nc" id="L45">            .joinToString(&quot;; &quot;) { &quot;${it.field}: ${it.defaultMessage}&quot; }</span>
+<span class="nc bnc" id="L46" title="All 4 branches missed.">            .ifEmpty { &quot;Validation error&quot; }</span>
+<span class="nc" id="L47">        return ResponseEntity</span>
+<span class="nc" id="L48">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L49">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = errorMessage))</span>
     }
 
     @ExceptionHandler(ConstraintViolationException::class)
     fun handleConstraintViolation(ex: ConstraintViolationException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="nc" id="L30">        val message = ex.constraintViolations.joinToString(&quot;; &quot;) { it.message }</span>
-<span class="nc" id="L31">        return ResponseEntity</span>
-<span class="nc" id="L32">            .status(HttpStatus.BAD_REQUEST)</span>
-<span class="nc" id="L33">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = message))</span>
+<span class="nc" id="L54">        val message = ex.constraintViolations.joinToString(&quot;; &quot;) { it.message }</span>
+<span class="nc" id="L55">        return ResponseEntity</span>
+<span class="nc" id="L56">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L57">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = message))</span>
     }
 
     @ExceptionHandler(BadRequestException::class)
     fun handleBadRequest(ex: BadRequestException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L38">        return ResponseEntity</span>
-<span class="fc" id="L39">            .status(HttpStatus.BAD_REQUEST)</span>
-<span class="pc bpc" id="L40" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = ex.message ?: &quot;Bad request&quot;))</span>
+<span class="fc" id="L62">        return ResponseEntity</span>
+<span class="fc" id="L63">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = ex.message ?: &quot;Bad request&quot;))</span>
     }
 
     @ExceptionHandler(HttpMessageNotReadableException::class)
     fun handleHttpMessageNotReadable(ex: HttpMessageNotReadableException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L45">        return ResponseEntity</span>
-<span class="fc" id="L46">            .status(HttpStatus.BAD_REQUEST)</span>
-<span class="fc" id="L47">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Malformed JSON request&quot;))</span>
+<span class="fc" id="L69">        return ResponseEntity</span>
+<span class="fc" id="L70">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="fc" id="L71">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Malformed JSON request&quot;))</span>
     }
 
     @ExceptionHandler(MethodArgumentTypeMismatchException::class)
     fun handleTypeMismatch(ex: MethodArgumentTypeMismatchException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="nc" id="L52">        return ResponseEntity</span>
-<span class="nc" id="L53">            .status(HttpStatus.BAD_REQUEST)</span>
-<span class="nc" id="L54">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Invalid parameter type: ${ex.name}&quot;))</span>
+<span class="nc" id="L76">        return ResponseEntity</span>
+<span class="nc" id="L77">            .status(HttpStatus.BAD_REQUEST)</span>
+<span class="nc" id="L78">            .body(ErrorResponse(status = HttpStatus.BAD_REQUEST.value(), message = &quot;Invalid parameter type: ${ex.name}&quot;))</span>
     }
 
     @ExceptionHandler(ResourceNotFoundException::class)
     fun handleNotFound(ex: ResourceNotFoundException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L59">        return ResponseEntity</span>
-<span class="fc" id="L60">            .status(HttpStatus.NOT_FOUND)</span>
-<span class="pc bpc" id="L61" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.NOT_FOUND.value(), message = ex.message ?: &quot;Resource not found&quot;))</span>
+<span class="fc" id="L83">        return ResponseEntity</span>
+<span class="fc" id="L84">            .status(HttpStatus.NOT_FOUND)</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.NOT_FOUND.value(), message = ex.message ?: &quot;Resource not found&quot;))</span>
     }
 
     @ExceptionHandler(ForbiddenAccessException::class)
     fun handleForbidden(ex: ForbiddenAccessException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L66">        return ResponseEntity</span>
-<span class="fc" id="L67">            .status(HttpStatus.FORBIDDEN)</span>
-<span class="pc bpc" id="L68" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access forbidden&quot;))</span>
+<span class="fc" id="L90">        return ResponseEntity</span>
+<span class="fc" id="L91">            .status(HttpStatus.FORBIDDEN)</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access forbidden&quot;))</span>
     }
 
     @ExceptionHandler(AccessDeniedException::class)
     fun handleAccessDenied(ex: AccessDeniedException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L73">        return ResponseEntity</span>
-<span class="fc" id="L74">            .status(HttpStatus.FORBIDDEN)</span>
-<span class="pc bpc" id="L75" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access denied&quot;))</span>
+<span class="fc" id="L97">        return ResponseEntity</span>
+<span class="fc" id="L98">            .status(HttpStatus.FORBIDDEN)</span>
+<span class="pc bpc" id="L99" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.FORBIDDEN.value(), message = ex.message ?: &quot;Access denied&quot;))</span>
     }
 
     @ExceptionHandler(ResourceAlreadyExistsException::class)
     fun handleConflict(ex: ResourceAlreadyExistsException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L80">        return ResponseEntity</span>
-<span class="fc" id="L81">            .status(HttpStatus.CONFLICT)</span>
-<span class="pc bpc" id="L82" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.CONFLICT.value(), message = ex.message ?: &quot;Resource already exists&quot;))</span>
+<span class="fc" id="L104">        return ResponseEntity</span>
+<span class="fc" id="L105">            .status(HttpStatus.CONFLICT)</span>
+<span class="pc bpc" id="L106" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.CONFLICT.value(), message = ex.message ?: &quot;Resource already exists&quot;))</span>
     }
 
     @ExceptionHandler(UnauthorizedException::class)
     fun handleUnauthorized(ex: UnauthorizedException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L87">        return ResponseEntity</span>
-<span class="fc" id="L88">            .status(HttpStatus.UNAUTHORIZED)</span>
-<span class="pc bpc" id="L89" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Unauthorized&quot;))</span>
+<span class="fc" id="L111">        return ResponseEntity</span>
+<span class="fc" id="L112">            .status(HttpStatus.UNAUTHORIZED)</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Unauthorized&quot;))</span>
     }
 
     @ExceptionHandler(AuthenticationException::class)
     fun handleAuthenticationException(ex: AuthenticationException): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="nc" id="L94">        return ResponseEntity</span>
-<span class="nc" id="L95">            .status(HttpStatus.UNAUTHORIZED)</span>
-<span class="nc bnc" id="L96" title="All 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Authentication failed&quot;))</span>
+<span class="nc" id="L118">        return ResponseEntity</span>
+<span class="nc" id="L119">            .status(HttpStatus.UNAUTHORIZED)</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.UNAUTHORIZED.value(), message = ex.message ?: &quot;Authentication failed&quot;))</span>
     }
 
     @ExceptionHandler(Exception::class)
     fun handleGeneral(ex: Exception): ResponseEntity&lt;ErrorResponse&gt; {
-<span class="fc" id="L101">        return ResponseEntity</span>
-<span class="fc" id="L102">            .status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
-<span class="pc bpc" id="L103" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.INTERNAL_SERVER_ERROR.value(), message = ex.message ?: &quot;Internal server error&quot;))</span>
+<span class="fc" id="L125">        return ResponseEntity</span>
+<span class="fc" id="L126">            .status(HttpStatus.INTERNAL_SERVER_ERROR)</span>
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">            .body(ErrorResponse(status = HttpStatus.INTERNAL_SERVER_ERROR.value(), message = ex.message ?: &quot;Internal server error&quot;))</span>
     }
 }
 </pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.8.14.202510111229</span></div></body></html>

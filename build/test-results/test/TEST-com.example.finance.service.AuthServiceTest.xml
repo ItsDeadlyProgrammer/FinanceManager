@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.service.AuthServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-04T07:27:53.001Z" hostname="ITZHARSHU" time="0.661">
+<testsuite name="com.example.finance.service.AuthServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:49.618Z" hostname="ITZHARSHU" time="0.649">
   <properties/>
-  <testcase name="login incorrect password throws UnauthorizedException()" classname="com.example.finance.service.AuthServiceTest" time="0.29"/>
-  <testcase name="register duplicate email throws ResourceAlreadyExistsException()" classname="com.example.finance.service.AuthServiceTest" time="0.004"/>
-  <testcase name="register blank username throws BadRequestException()" classname="com.example.finance.service.AuthServiceTest" time="0.002"/>
-  <testcase name="login success()" classname="com.example.finance.service.AuthServiceTest" time="0.216"/>
-  <testcase name="register success()" classname="com.example.finance.service.AuthServiceTest" time="0.022"/>
+  <testcase name="login incorrect password throws UnauthorizedException()" classname="com.example.finance.service.AuthServiceTest" time="0.293"/>
+  <testcase name="register duplicate email throws ResourceAlreadyExistsException()" classname="com.example.finance.service.AuthServiceTest" time="0.003"/>
+  <testcase name="register blank username throws BadRequestException()" classname="com.example.finance.service.AuthServiceTest" time="0.001"/>
+  <testcase name="login success()" classname="com.example.finance.service.AuthServiceTest" time="0.184"/>
+  <testcase name="register success()" classname="com.example.finance.service.AuthServiceTest" time="0.016"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
