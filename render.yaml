@@ -3,22 +3,33 @@ services:
     name: personal-finance-manager
     env: docker
     plan: free
+
     healthCheckPath: /swagger-ui/index.html
+
     envVars:
       - key: PORT
         value: 8080
+
       - key: DATABASE_URL
         fromDatabase:
           name: finance-db
           property: connectionString
+
       - key: DB_USERNAME
         fromDatabase:
           name: finance-db
           property: user
+
       - key: DB_PASSWORD
         fromDatabase:
           name: finance-db
           property: password
+
+      - key: DB_DRIVER
+        value: org.postgresql.Driver
+
+      - key: DB_DIALECT
+        value: org.hibernate.dialect.PostgreSQLDialect
 
 databases:
   - name: finance-db
