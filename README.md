@@ -236,9 +236,3 @@ The repository includes a production-ready `Dockerfile` and `render.yaml` specif
 ---
 
 
-
-
-
-
-
-ech UI**: Built with a clean banking aesthetic (neutral backgrounds, crisp typography, subtle borders, no AI glow/purple gradients) for a professional SaaS feel.
