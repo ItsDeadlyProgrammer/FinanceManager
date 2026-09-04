@@ -3,7 +3,6 @@ services:
     name: personal-finance-manager
     env: docker
     plan: free
-
     healthCheckPath: /swagger-ui/index.html
 
     envVars:
