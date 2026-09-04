@@ -188,46 +188,6 @@ Access the application in your browser:
 | `DB_DIALECT` | Hibernate SQL dialect | `org.hibernate.dialect.H2Dialect` (Production: `org.hibernate.dialect.PostgreSQLDialect`) |
 
 ---
-
-## Running Tests
-
-Execute the automated unit and integration test suite:
-
-```bash
-./gradlew test
-```
-
----
-
-## Code Coverage
-
-Generate the JaCoCo coverage report:
-
-```bash
-./gradlew test jacocoTestReport
-```
-
-View the HTML coverage report at:
-`build/reports/jacoco/test/html/index.html`
-
-The project enforces an **80% minimum instruction coverage** threshold via `jacocoTestCoverageVerification`.
-
----
-
-## Deployment (Render)
-
-The repository includes a production-ready `Dockerfile` and `render.yaml` specification for zero-config deployment on Render.
-
-### Deployment Steps on Render
-1. Push this repository to GitHub.
-2. Sign in to [Render Dashboard](https://dashboard.render.com).
-3. Click **New +** → **Blueprint**.
-4. Connect your GitHub repository. Render will automatically detect `render.yaml` and provision:
-   - A PostgreSQL Managed Database service (`finance-db`).
-   - A Web Service building from `Dockerfile` bound to `${PORT:8080}`.
-5. Click **Apply**. Once deployed, Render will provide a live URL (e.g. `https://personal-finance-manager.onrender.com`).
-
----
 ## 👨‍💻 Author
 
 **Harshvardhan Singh**  
