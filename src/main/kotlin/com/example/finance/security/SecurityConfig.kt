@@ -17,12 +17,19 @@ import org.springframework.security.crypto.password.PasswordEncoder
 import org.springframework.security.web.AuthenticationEntryPoint
 import org.springframework.security.web.SecurityFilterChain
 import org.springframework.security.web.access.AccessDeniedHandler
+import org.springframework.security.web.firewall.HttpFirewall
+import org.springframework.security.web.firewall.DefaultHttpFirewall
 
 @Configuration
 @EnableWebSecurity
 class SecurityConfig(
     private val objectMapper: ObjectMapper
 ) {
+
+    @Bean
+    fun httpFirewall(): HttpFirewall {
+        return DefaultHttpFirewall()
+    }
 
     @Bean
     fun passwordEncoder(): PasswordEncoder {

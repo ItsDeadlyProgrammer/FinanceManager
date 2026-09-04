@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.service.CategoryServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:50.270Z" hostname="ITZHARSHU" time="0.34">
+<testsuite name="com.example.finance.service.CategoryServiceTest" tests="6" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:47:09.054Z" hostname="ITZHARSHU" time="0.39">
   <properties/>
-  <testcase name="deleteCustomCategory non referenced success()" classname="com.example.finance.service.CategoryServiceTest" time="0.066"/>
-  <testcase name="getCategories returns default and user custom categories()" classname="com.example.finance.service.CategoryServiceTest" time="0.185"/>
-  <testcase name="createCustomCategory success()" classname="com.example.finance.service.CategoryServiceTest" time="0.011"/>
-  <testcase name="createCustomCategory duplicate name throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.018"/>
-  <testcase name="deleteCustomCategory referenced category throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.024"/>
-  <testcase name="deleteCustomCategory default category throws BadRequestException()" classname="com.example.finance.service.CategoryServiceTest" time="0.01"/>
+  <testcase name="deleteCustomCategory non referenced success()" classname="com.example.finance.service.CategoryServiceTest" time="0.077"/>
+  <testcase name="getCategories returns default and user custom categories()" classname="com.example.finance.service.CategoryServiceTest" time="0.169"/>
+  <testcase name="createCustomCategory success()" classname="com.example.finance.service.CategoryServiceTest" time="0.006"/>
+  <testcase name="createCustomCategory duplicate name throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.005"/>
+  <testcase name="deleteCustomCategory referenced category throws ResourceAlreadyExistsException()" classname="com.example.finance.service.CategoryServiceTest" time="0.006"/>
+  <testcase name="deleteCustomCategory default category throws BadRequestException()" classname="com.example.finance.service.CategoryServiceTest" time="0.004"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

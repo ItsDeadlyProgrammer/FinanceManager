@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.security.CustomUserDetailsServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:49.302Z" hostname="ITZHARSHU" time="0.194">
+<testsuite name="com.example.finance.security.CustomUserDetailsServiceTest" tests="2" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:47:08.180Z" hostname="ITZHARSHU" time="0.208">
   <properties/>
-  <testcase name="loadUserByUsername success()" classname="com.example.finance.security.CustomUserDetailsServiceTest" time="0.074"/>
-  <testcase name="loadUserByUsername user not found throws UsernameNotFoundException()" classname="com.example.finance.security.CustomUserDetailsServiceTest" time="0.004"/>
+  <testcase name="loadUserByUsername success()" classname="com.example.finance.security.CustomUserDetailsServiceTest" time="0.084"/>
+  <testcase name="loadUserByUsername user not found throws UsernameNotFoundException()" classname="com.example.finance.security.CustomUserDetailsServiceTest" time="0.005"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

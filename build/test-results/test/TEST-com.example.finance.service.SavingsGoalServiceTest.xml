@@ -1,10 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.service.SavingsGoalServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:50.659Z" hostname="ITZHARSHU" time="0.336">
+<testsuite name="com.example.finance.service.SavingsGoalServiceTest" tests="4" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:47:09.467Z" hostname="ITZHARSHU" time="0.293">
   <properties/>
-  <testcase name="getGoals and getGoal by ID()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.042"/>
-  <testcase name="createGoal success and progress calculation()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.105"/>
-  <testcase name="updateGoal success and deleteGoal success()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.008"/>
-  <testcase name="getGoal forbidden throws ForbiddenAccessException()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.004"/>
+  <testcase name="getGoals and getGoal by ID()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.098"/>
+  <testcase name="createGoal success and progress calculation()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.075"/>
+  <testcase name="updateGoal success and deleteGoal success()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.009"/>
+  <testcase name="getGoal forbidden throws ForbiddenAccessException()" classname="com.example.finance.service.SavingsGoalServiceTest" time="0.003"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>

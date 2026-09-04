@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<testsuite name="com.example.finance.service.TransactionServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:28:45.596Z" hostname="ITZHARSHU" time="1.191">
+<testsuite name="com.example.finance.service.TransactionServiceTest" tests="5" skipped="0" failures="0" errors="0" timestamp="2026-09-04T11:47:09.762Z" hostname="ITZHARSHU" time="0.155">
   <properties/>
-  <testcase name="createTransaction negative amount throws BadRequestException()" classname="com.example.finance.service.TransactionServiceTest" time="0.036"/>
-  <testcase name="createTransaction future date throws BadRequestException()" classname="com.example.finance.service.TransactionServiceTest" time="0.003"/>
-  <testcase name="updateTransaction date modification attempt ignores date()" classname="com.example.finance.service.TransactionServiceTest" time="0.432"/>
-  <testcase name="updateTransaction forbidden user throws ForbiddenAccessException()" classname="com.example.finance.service.TransactionServiceTest" time="0.006"/>
-  <testcase name="createTransaction success()" classname="com.example.finance.service.TransactionServiceTest" time="0.09"/>
+  <testcase name="createTransaction negative amount throws BadRequestException()" classname="com.example.finance.service.TransactionServiceTest" time="0.001"/>
+  <testcase name="createTransaction future date throws BadRequestException()" classname="com.example.finance.service.TransactionServiceTest" time="0.001"/>
+  <testcase name="updateTransaction date modification attempt ignores date()" classname="com.example.finance.service.TransactionServiceTest" time="0.072"/>
+  <testcase name="updateTransaction forbidden user throws ForbiddenAccessException()" classname="com.example.finance.service.TransactionServiceTest" time="0.003"/>
+  <testcase name="createTransaction success()" classname="com.example.finance.service.TransactionServiceTest" time="0.006"/>
   <system-out><![CDATA[]]></system-out>
   <system-err><![CDATA[]]></system-err>
 </testsuite>
