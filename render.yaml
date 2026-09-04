@@ -9,10 +9,20 @@ services:
       - key: PORT
         value: 8080
 
-      - key: DATABASE_URL
+      - key: DB_HOST
         fromDatabase:
           name: finance-db
-          property: connectionString
+          property: host
+
+      - key: DB_PORT
+        fromDatabase:
+          name: finance-db
+          property: port
+
+      - key: DB_NAME
+        fromDatabase:
+          name: finance-db
+          property: database
 
       - key: DB_USERNAME
         fromDatabase:
