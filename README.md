@@ -1,4 +1,4 @@
-# Personal Finance Manager — Syfe Backend Take-Home Assignment
+# Personal Finance Manager 
 
 A production-quality **Personal Finance Manager** application built with Kotlin, Spring Boot 3.x, Spring Security (Session-based), Spring Data JPA, PostgreSQL / H2, Bean Validation, JaCoCo, Swagger UI, and a clean professional fintech web dashboard.
 
@@ -12,7 +12,6 @@ A production-quality **Personal Finance Manager** application built with Kotlin,
 - **Category Management**: Built-in default categories (`Salary`, `Food`, `Rent`, `Transportation`, `Entertainment`, `Healthcare`, `Utilities`) plus custom categories with unique name constraints per user.
 - **Savings Goals & Real-Time Progress**: Dynamic calculation of goal progress based on active user transactions between goal start date and current date.
 - **Financial Reports**: Monthly and yearly aggregated financial breakdown by category name and net savings calculation using precise `BigDecimal` arithmetic.
-- **Modern Fintech UI**: Responsive dashboard with light neutral background, subtle borders, compact cards, clear tables, and restrained green/red financial indicators.
 - **OpenAPI / Swagger**: Interactive API documentation at `/swagger-ui/index.html`.
 
 ---
@@ -229,11 +228,17 @@ The repository includes a production-ready `Dockerfile` and `render.yaml` specif
 5. Click **Apply**. Once deployed, Render will provide a live URL (e.g. `https://personal-finance-manager.onrender.com`).
 
 ---
+## 👨‍💻 Author
 
-## Design Decisions
+**Harshvardhan Singh**  
+[![GitHub](https://img.shields.io/badge/GitHub-ItsDeadlyProgrammer-blue)](https://github.com/ItsDeadlyProgrammer)
 
-- **Why Session Authentication instead of JWT**: Session-based authentication with secure HTTP cookies matches traditional banking security models, simplifies server-side session invalidation on logout, and prevents token theft vectors.
-- **Why BigDecimal for Money**: Prevents binary floating-point rounding errors (`0.1 + 0.2 != 0.3`) in financial transactions and report aggregations.
-- **Why DTO Architecture**: Separates external API contracts from database entities, preventing inadvertent exposure of entity fields like `passwordHash` or internal entity relations.
-- **Why User Multi-Tenancy Scoping**: Ensures absolute data isolation so User A can never read or mutate User B's resources, returning HTTP 403 Forbidden or 404 Not Found appropriately.
-- **Why Clean Fintech UI**: Built with a clean banking aesthetic (neutral backgrounds, crisp typography, subtle borders, no AI glow/purple gradients) for a professional SaaS feel.
+---
+
+
+
+
+
+
+
+ech UI**: Built with a clean banking aesthetic (neutral backgrounds, crisp typography, subtle borders, no AI glow/purple gradients) for a professional SaaS feel.
