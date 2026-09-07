@@ -178,9 +178,15 @@ cd personal-finance-manager
 ```
 
 Access the application in your browser:
+
+### Live Production
+- **Web UI Dashboard**: [https://personal-finance-manager-zh7c.onrender.com/](https://personal-finance-manager-zh7c.onrender.com/)
+- **Swagger UI**: [https://personal-finance-manager-zh7c.onrender.com/swagger-ui/index.html](https://personal-finance-manager-zh7c.onrender.com/swagger-ui/index.html)
+
+### Local Development
 - **Web UI Dashboard**: `http://localhost:8080/`
 - **Swagger UI**: `http://localhost:8080/swagger-ui/index.html`
-- **H2 Console**: `http://localhost:8080/h2-console`
+- **H2 Console**: `http://localhost:8080/h2-console` (Only available when running with H2 database)
 
 ---
 
